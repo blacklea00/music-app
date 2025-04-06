@@ -9,7 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="text_white">#FFFFFFFF</color>
     <color name="text_pink">#ff6ebb</color>
-    <color name="text_black">#474647</color>
+    <color name="music_card_pink">#e3bfd7</color>
+    <color name="text_black">#878486</color>
     <color name="bar_color">#ffdeef</color>
     <color name="background_color">#f7f7f7</color>
 </resources>
