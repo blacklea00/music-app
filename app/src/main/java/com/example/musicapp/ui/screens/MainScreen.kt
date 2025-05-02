@@ -62,7 +62,7 @@ fun MainScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = colorResource(R.color.bar_color))
+                        .background(color = colorResource(R.color.white))
                         .padding(15.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {

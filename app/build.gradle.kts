@@ -64,4 +64,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
     // status bar control
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+    // snapper 分页式滑动
+    implementation("dev.chrisbanes.snapper:snapper:0.3.0")
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
 }
