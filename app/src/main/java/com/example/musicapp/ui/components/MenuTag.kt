@@ -1,11 +1,9 @@
 package com.example.musicapp.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,14 +16,11 @@ import com.example.musicapp.R
 
 @Composable
 fun MenuTag(title: String) {
-    Box(
-        modifier = Modifier
-            .background(
-                color = colorResource(R.color.bar_color),
-                shape = RoundedCornerShape(10.dp)
-            )
-            .wrapContentSize()
-            .clickable {  }
+    Surface(
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier.wrapContentSize(),
+        color = colorResource(R.color.bar_color),
+        onClick = {}
     ) {
         Text(
             text = title,
