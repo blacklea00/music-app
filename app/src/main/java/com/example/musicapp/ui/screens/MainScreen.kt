@@ -35,8 +35,8 @@ import androidx.compose.ui.unit.sp
 import com.example.musicapp.R
 import com.example.musicapp.constants.Constants
 import com.example.musicapp.data.model.NavItem
-import com.example.musicapp.ui.components.AnimatedPlayer
 import com.example.musicapp.ui.components.BottomBar
+import com.example.musicapp.ui.components.MusicPlayer
 import com.example.musicapp.ui.components.PlayerState
 import com.example.musicapp.ui.components.TopBar
 
@@ -63,7 +63,7 @@ fun MainScreen(
         .fillMaxSize()) {
 
 
-        AnimatedPlayer(
+        MusicPlayer(
             state = playerState,
             onCollapse = { playerState = PlayerState.COLLAPSED },
             onExpand = { playerState = PlayerState.EXPANDED }

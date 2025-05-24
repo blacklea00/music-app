@@ -111,16 +111,14 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScrollState: ScrollState, onEx
         // display top tags
         Tags()
 
-        Text("click me", modifier = Modifier.clickable { onExpandPlayer() })
-
         // quick picks listing
-        QuickPicks(musicBgList)
+        QuickPicks(musicBgList, onExpandPlayer)
 
         // most played
-        MostPlayed()
+        MostPlayed(onExpandPlayer)
 
         // special dial
-        SpecialDial(onClickHandleMoreSetting = { showSheet = true })
+        SpecialDial(onClickHandleMoreSetting = { showSheet = true }, onExpandPlayer)
 
     }
 }
@@ -147,7 +145,7 @@ fun Tags() {
 }
 
 @Composable
-fun QuickPicks(musicBgList: List<String>) {
+fun QuickPicks(musicBgList: List<String>, onExpandPlayer: () -> Unit) {
     Text(
         text = stringResource(R.string.title_1),
         style = TextStyle(
@@ -163,7 +161,7 @@ fun QuickPicks(musicBgList: List<String>) {
     ) {
         items(musicBgList, key = { it }) { imagePath ->
             Surface(
-                onClick = {},
+                onClick = {onExpandPlayer()},
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .width(250.dp)
@@ -207,7 +205,7 @@ fun QuickPicks(musicBgList: List<String>) {
 
 
 @Composable
-fun MostPlayed() {
+fun MostPlayed(onExpandPlayer: () -> Unit) {
 
     val items = listOf("稻香", "我的滑板鞋", "搁浅", "爱错", "偏爱", "我爱你，但是我要回家", "盛夏光年", "慢冷", "普通朋友")
     val musicImage = ImageConstants.IMAGE_2
@@ -229,7 +227,7 @@ fun MostPlayed() {
             contentPadding = PaddingValues(2.dp) // 内边距
         ) {
             items(items) { item ->
-                GridItem(content = item, musicImage) // 每个格子内容
+                GridItem(content = item, musicImage, onExpandPlayer) // 每个格子内容
             }
         }
 
@@ -237,14 +235,14 @@ fun MostPlayed() {
 }
 
 @Composable
-fun GridItem(content: String, imagePath: String) {
+fun GridItem(content: String, imagePath: String, onExpandPlayer: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f) // 保持正方形
             .background(colorResource(R.color.white)) // 背景色
             .padding(1.dp)
-            .clickable { }
+            .clickable { onExpandPlayer() }
         ,
     ) {
         // 图片（占满整个 Box）
@@ -293,7 +291,7 @@ fun GridItem(content: String, imagePath: String) {
 // 方案一：优化的 LazyRow + Snapper
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
-fun SpecialDial(onClickHandleMoreSetting: () -> Unit) {
+fun SpecialDial(onClickHandleMoreSetting: () -> Unit, onExpandPlayer: () -> Unit) {
     val listState = rememberLazyListState()
 
     // 优化的 flingBehavior，去掉复杂的 snapIndex 逻辑
@@ -328,7 +326,8 @@ fun SpecialDial(onClickHandleMoreSetting: () -> Unit) {
         items(4) { index ->
             SpecialDialPage(
                 pageIndex = index,
-                onClickHandleMoreSetting = onClickHandleMoreSetting
+                onClickHandleMoreSetting = onClickHandleMoreSetting,
+                onExpandPlayer
             )
         }
     }
@@ -340,7 +339,8 @@ fun SpecialDial(onClickHandleMoreSetting: () -> Unit) {
 @Composable
 fun SpecialDialPage(
     pageIndex: Int,
-    onClickHandleMoreSetting: () -> Unit
+    onClickHandleMoreSetting: () -> Unit,
+    onExpandPlayer: () -> Unit
 ) {
     // 使用 Column 替代 LazyColumn，避免嵌套滚动冲突
     Column(
@@ -353,7 +353,8 @@ fun SpecialDialPage(
                 songTitle = "歌曲名 ${pageIndex * 4 + itemIndex + 1}", // 动态标题
                 artist = "周杰伦",
                 views = "${(100 + itemIndex * 50)}M views",
-                onClickHandleMoreSetting = onClickHandleMoreSetting
+                onClickHandleMoreSetting = onClickHandleMoreSetting,
+                onExpandPlayer
             )
         }
     }
@@ -365,10 +366,11 @@ fun SpecialDialContentBox(
     songTitle: String,
     artist: String,
     views: String,
-    onClickHandleMoreSetting: () -> Unit
+    onClickHandleMoreSetting: () -> Unit,
+    onExpandPlayer: () -> Unit
 ) {
     Surface(
-        onClick = { },
+        onClick = { onExpandPlayer() },
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp),
