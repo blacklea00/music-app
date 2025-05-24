@@ -1,9 +1,11 @@
 package com.example.musicapp.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,24 +18,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,23 +60,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.trace
 import coil.compose.rememberAsyncImagePainter
-import coil.request.Tags
 import com.example.musicapp.R
 import com.example.musicapp.constants.ImageConstants
-import com.example.musicapp.ui.components.AnimatedPlayer
 import com.example.musicapp.ui.components.MenuTag
-import com.example.musicapp.ui.components.ModalBottomSheet
-import com.example.musicapp.ui.components.PlayerState
+import com.example.musicapp.ui.components.SongSetting
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, homeScrollState: ScrollState, onExpandPlayer: () -> Unit) {
-
 
     val musicBgList = listOf(
         ImageConstants.IMAGE_1,
@@ -73,8 +81,25 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScrollState: ScrollState, onEx
         ImageConstants.IMAGE_3
     )
 
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showSheet by remember { mutableStateOf(false) }
-    ModalBottomSheet(showSheet)
+
+    // bottom sheet modal
+    if (showSheet) {
+        LaunchedEffect(Unit) {
+            sheetState.show()
+        }
+        ModalBottomSheet(
+            onDismissRequest = { showSheet = false },
+            modifier = Modifier
+                .fillMaxWidth(0.95f),
+            sheetState = sheetState,
+            shape = RoundedCornerShape(10.dp),
+            dragHandle = null
+        ) {
+            SongSetting()
+        }
+    }
 
     Column(
         modifier = modifier
@@ -86,47 +111,15 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScrollState: ScrollState, onEx
         // display top tags
         Tags()
 
-
         Text("click me", modifier = Modifier.clickable { onExpandPlayer() })
-
-        // quick picks word
-        Text(
-            text = stringResource(R.string.title_1),
-            style = TextStyle(
-                color = colorResource(R.color.text_black),
-                fontSize = 23.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
 
         // quick picks listing
         QuickPicks(musicBgList)
 
         // most played
-
-        Text(
-            text = stringResource(R.string.title_2),
-            style = TextStyle(
-                color = colorResource(R.color.text_black),
-                fontSize = 23.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-
-
         MostPlayed()
 
         // special dial
-
-        Text(
-            text = stringResource(R.string.title_3),
-            style = TextStyle(
-                color = colorResource(R.color.text_black),
-                fontSize = 23.sp,
-                fontWeight = FontWeight.Bold,
-            ),
-        )
-
         SpecialDial(onClickHandleMoreSetting = { showSheet = true })
 
     }
@@ -155,6 +148,15 @@ fun Tags() {
 
 @Composable
 fun QuickPicks(musicBgList: List<String>) {
+    Text(
+        text = stringResource(R.string.title_1),
+        style = TextStyle(
+            color = colorResource(R.color.text_black),
+            fontSize = 23.sp,
+            fontWeight = FontWeight.Bold
+        )
+    )
+
     LazyRow (
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(10.dp)
@@ -209,6 +211,15 @@ fun MostPlayed() {
 
     val items = listOf("稻香", "我的滑板鞋", "搁浅", "爱错", "偏爱", "我爱你，但是我要回家", "盛夏光年", "慢冷", "普通朋友")
     val musicImage = ImageConstants.IMAGE_2
+
+    Text(
+        text = stringResource(R.string.title_2),
+        style = TextStyle(
+            color = colorResource(R.color.text_black),
+            fontSize = 23.sp,
+            fontWeight = FontWeight.Bold
+        )
+    )
 
     Box (modifier = Modifier.height(370.dp)) {
 
@@ -279,11 +290,13 @@ fun GridItem(content: String, imagePath: String) {
     }
 }
 
+// 方案一：优化的 LazyRow + Snapper
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun SpecialDial(onClickHandleMoreSetting: () -> Unit) {
-
     val listState = rememberLazyListState()
+
+    // 优化的 flingBehavior，去掉复杂的 snapIndex 逻辑
     val flingBehavior = rememberSnapperFlingBehavior(
         lazyListState = listState,
         snapIndex = { layoutInfo, startIndex, targetIndex ->
@@ -296,91 +309,129 @@ fun SpecialDial(onClickHandleMoreSetting: () -> Unit) {
         }
     )
 
-    LazyRow (
+    Text(
+        text = stringResource(R.string.title_3),
+        style = TextStyle(
+            color = colorResource(R.color.text_black),
+            fontSize = 23.sp,
+            fontWeight = FontWeight.Bold,
+        ),
+    )
+
+    LazyRow(
         state = listState,
         flingBehavior = flingBehavior,
         contentPadding = PaddingValues(horizontal = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(15.dp), // 增加间距提升视觉效果
         modifier = Modifier.fillMaxWidth()
     ) {
-        items(4, key = {it}) { index ->
-
-            Column (
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.width(330.dp)
-            ) {
-                repeat(4) {
-                    SpecialDialContentBox(ImageConstants.IMAGE_1, onClickHandleMoreSetting)
-                }
-            }
-
+        items(4) { index ->
+            SpecialDialPage(
+                pageIndex = index,
+                onClickHandleMoreSetting = onClickHandleMoreSetting
+            )
         }
     }
 
+    Spacer(modifier = Modifier.height(10.dp))
+}
+
+
+@Composable
+fun SpecialDialPage(
+    pageIndex: Int,
+    onClickHandleMoreSetting: () -> Unit
+) {
+    // 使用 Column 替代 LazyColumn，避免嵌套滚动冲突
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.width(330.dp)
+    ) {
+        repeat(4) { itemIndex ->
+            SpecialDialContentBox(
+                imagePath = ImageConstants.IMAGE_1,
+                songTitle = "歌曲名 ${pageIndex * 4 + itemIndex + 1}", // 动态标题
+                artist = "周杰伦",
+                views = "${(100 + itemIndex * 50)}M views",
+                onClickHandleMoreSetting = onClickHandleMoreSetting
+            )
+        }
+    }
 }
 
 @Composable
-fun SpecialDialContentBox(imagePath: String, onClickHandleMoreSetting: () -> Unit) {
-    Box(
+fun SpecialDialContentBox(
+    imagePath: String,
+    songTitle: String,
+    artist: String,
+    views: String,
+    onClickHandleMoreSetting: () -> Unit
+) {
+    Surface(
+        onClick = { },
         modifier = Modifier
-            .clickable { }
-            .height(60.dp)
-            .wrapContentWidth()
-            .background(color = colorResource(R.color.white), shape = RoundedCornerShape(10.dp))
+            .fillMaxWidth()
+            .height(60.dp),
+        shape = RoundedCornerShape(10.dp),
+        color = colorResource(R.color.white),
+        shadowElevation = 2.dp // 添加轻微阴影
     ) {
-        Row (
+        Row(
             modifier = Modifier
-                .fillMaxHeight(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                .fillMaxSize()
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Box (
+            // 图片部分
+            Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .clip(shape = RoundedCornerShape(10.dp))
-                    .padding(2.dp)
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(imagePath),
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize()
                 )
             }
-            Box(
-                modifier = Modifier
-                    .weight(3f)
-                    .fillMaxHeight()
+
+            // 文字信息部分
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        "歌曲名",
-                        style = TextStyle(
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                    )
-                    Text(
-                        "周杰伦 100M views",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            color = colorResource(R.color.text_black)
-                        )
-                    )
-                }
+                Text(
+                    text = songTitle,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = colorResource(R.color.text_black)
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "$artist · $views",
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        color = colorResource(R.color.text_black).copy(alpha = 0.7f)
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable { onClickHandleMoreSetting() }
+
+            // 更多按钮 - 简化版本，不使用 ripple
+            IconButton(
+                onClick = { onClickHandleMoreSetting() },
+                modifier = Modifier.size(40.dp)
             ) {
                 Icon(
                     Icons.Default.MoreVert,
-                    contentDescription = "",
+                    contentDescription = "更多选项",
+                    tint = colorResource(R.color.text_black).copy(alpha = 0.6f)
                 )
             }
         }
