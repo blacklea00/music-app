@@ -19,7 +19,7 @@ fun MenuTag(title: String) {
     Surface(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.wrapContentSize(),
-        color = colorResource(R.color.bar_color),
+        color = colorResource(R.color.white),
         onClick = {}
     ) {
         Text(
@@ -27,7 +27,7 @@ fun MenuTag(title: String) {
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp),
             style = TextStyle(
-                color = colorResource(R.color.text_pink),
+                color = colorResource(R.color.text_black),
                 fontWeight = FontWeight.Bold,
                 fontSize = 19.sp
             )

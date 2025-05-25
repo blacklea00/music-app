@@ -27,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,15 +37,16 @@ import com.example.musicapp.R
 import com.example.musicapp.constants.Constants
 import com.example.musicapp.data.model.NavItem
 import com.example.musicapp.ui.components.BottomBar
-import com.example.musicapp.ui.components.MusicPlayer
-import com.example.musicapp.ui.components.PlayerState
-import com.example.musicapp.ui.components.TopBar
+import com.example.musicapp.ui.screens.home.MusicPlayer
+import com.example.musicapp.ui.screens.home.PlayerState
+import com.example.musicapp.ui.screens.home.TopBar
+import com.example.musicapp.ui.screens.home.HomeScreen
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier
 ){
-    val barTextColor = TextStyle(color = colorResource(R.color.text_pink), fontSize = 14.sp)
+    val barTextColor = TextStyle(color = Color(0xff763085), fontSize = 14.sp)
 
     var selectedBar by remember{ mutableStateOf(Constants.Navigation.HOME) }
 
@@ -98,7 +100,7 @@ fun MainScreen(
                     Box(
                         modifier = Modifier
                             .height(8.dp)
-                            .background(color = colorResource(R.color.bar_color))
+                            .background(color = colorResource(R.color.white))
                             .fillMaxWidth()
                     )
                 }
@@ -121,7 +123,7 @@ fun MainScreen(
                     Text(
                         text = "Preparing",
                         style = TextStyle(
-                            color = colorResource(R.color.white),
+//                            color = colorResource(R.color.white),
                             fontSize = 23.sp,
                             fontWeight = FontWeight.Bold
                         )

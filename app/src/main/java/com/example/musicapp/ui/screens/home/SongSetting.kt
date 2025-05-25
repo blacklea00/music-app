@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.components
+package com.example.musicapp.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

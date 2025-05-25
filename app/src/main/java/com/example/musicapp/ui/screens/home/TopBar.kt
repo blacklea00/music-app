@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.components
+package com.example.musicapp.ui.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -49,7 +48,7 @@ fun TopBar() {
                 Box(
                     modifier = Modifier
                         .background(
-                            color = colorResource(R.color.text_pink),
+                            color = colorResource(R.color.black),
                             shape = RoundedCornerShape(50.dp)
                         )
                 ) {
@@ -68,7 +67,7 @@ fun TopBar() {
                 Text(
                     text = stringResource(R.string.app_name),
                     style = TextStyle(
-                        color = colorResource(R.color.text_pink),
+                        color = colorResource(R.color.black),
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -84,7 +83,7 @@ fun TopBar() {
                             imageVector = Icons.Outlined.Notifications,
                             contentDescription = null,
                             modifier = Modifier.size(35.dp),
-                            tint = colorResource(R.color.text_pink)
+                            tint = colorResource(R.color.black)
                         )
 
                         Spacer(modifier = Modifier.width(20.dp))
@@ -93,7 +92,7 @@ fun TopBar() {
                             imageVector = Icons.Default.Search,
                             contentDescription = null,
                             modifier = Modifier.size(35.dp),
-                            tint = colorResource(R.color.text_pink)
+                            tint = colorResource(R.color.black)
                         )
                     }
                 }

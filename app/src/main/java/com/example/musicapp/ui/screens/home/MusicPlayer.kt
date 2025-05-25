@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.components
+package com.example.musicapp.ui.screens.home
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
@@ -6,7 +6,6 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,10 +21,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Repeat
-import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material.icons.outlined.PauseCircleOutline
 import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material.icons.outlined.Repeat
 import androidx.compose.material.icons.outlined.Shuffle
@@ -46,14 +44,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
-import com.example.musicapp.R
 import com.example.musicapp.constants.ImageConstants
 
 enum class PlayerState {
@@ -200,7 +196,7 @@ fun Player(modifier: Modifier = Modifier, onCollapse: () -> Unit) {
 fun PlayButton(modifier: Modifier = Modifier) {
 
     var progress by remember { mutableStateOf(0f) }
-
+    var isPlayed by remember { mutableStateOf(false) }
 
     Column (
         verticalArrangement = Arrangement.Bottom,
@@ -236,12 +232,17 @@ fun PlayButton(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(40.dp)
             )
 
-            Icon(
-                imageVector = Icons.Outlined.PlayCircle,
-                contentDescription = Icons.Outlined.PlayCircle.name,
-                tint = Color.White,
+            IconButton(
+                onClick = {isPlayed = !isPlayed},
                 modifier = Modifier.size(70.dp)
-            )
+            ) {
+                Icon(
+                    imageVector = if (isPlayed) Icons.Outlined.PlayCircle else Icons.Outlined.PauseCircleOutline,
+                    contentDescription = if (isPlayed) Icons.Outlined.PlayCircle.name else Icons.Outlined.PauseCircleOutline.name,
+                    tint = Color.White,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
             Icon(
                 imageVector = Icons.Filled.SkipNext,
