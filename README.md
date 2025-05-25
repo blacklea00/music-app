@@ -2,6 +2,9 @@
 
 This is a simple UI template inspired by YouTube Music, built using **Jetpack Compose**.
 
+<img src="source/img1.jpeg" alt="App Screenshot" style="width: 200px"/>
+<img src="source/img2.jpeg" alt="App Screenshot" style="width: 200px"/>
+
 ### ✨ Features
 - Bottom navigation layout
 - Expandable mini music player
